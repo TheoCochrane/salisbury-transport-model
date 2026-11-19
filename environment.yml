@@ -1,0 +1,20 @@
+name: salisbury
+channels:
+  - conda-forge
+channel_priority: strict
+dependencies:
+  - python=3.12
+  - geopandas
+  - osmnx
+  - networkx
+  - scipy
+  - pandas
+  - numpy
+  - matplotlib
+  - jupyterlab
+  - ipykernel
+  - pytest
+  - pyyaml
+  - python-dotenv
+  - requests
+  - openpyxl

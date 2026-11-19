@@ -221,3 +221,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project: data and outputs (large, or downloaded from public sources)
+data/
+outputs/
+
+# Project: PDFs (textbooks and the plan are not redistributed in the repo)
+*.pdf
+
+# Project: Google Routes API raw responses (terms restrict caching)
+docs/api_raw/
