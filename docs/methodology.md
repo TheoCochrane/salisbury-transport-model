@@ -14,6 +14,8 @@ Written for: me, returning to the project later, and anyone checking the work.
 
 _Notebook built: `notebooks/toy_model.ipynb`. Four zones, made-up numbers, checked by hand. Every decision in it is referenced to TAG below._
 
+Level 0 of the notebook (real places, then zones, nodes and links, and what each step leaves out) has no model numbers and adds no TAG decisions. It explains the simplifications behind the rest of the notebook.
+
 ## Assumptions log
 
 | Date | Item | Value / choice | Source | Effect of change |
@@ -37,29 +39,31 @@ Sources checked: [TAG M2.1 Variable Demand Modelling](https://assets.publishing.
 | Part | Decision | Value in notebook | TAG reference | Status | Note |
 |------|----------|-------------------|---------------|--------|------|
 | A | Links are two-way, same time in both directions | Assumed | M3.1 section 2.4 (network structure) | Not checked | Simplification. Real networks have directional links. |
-| A | Free-flow times and link capacities | 8 to 20 min; 40 to 100 veh/h | M3.1 section 2.4; Appendix E (speed/flow) | Placeholder | Capacities are far below real road capacities. Replace from network data. |
+| A | Free-flow times | 8 to 20 min | M3.1 section 2.4; Appendix E (speed/flow) | Placeholder | Replace from network data. |
+| A | Link capacities | 100 to 250 veh/h | M3.1 section 2.4; Appendix E | Placeholder | Raised from 40 to 100 veh/h once the other-purpose trips were assigned, because the original capacities gave v/c above 2.5. Replace from network data. |
 | A | Shortest times by Floyd–Warshall | Algorithm | None (standard algorithm) | Not in TAG | Any correct shortest-path method gives the same result. |
+| A | Intrazonal cost = half the nearest zone's cost | nearest ÷ 2 | M2.2 section 5.2.28; M2.1 section 2.4.4 | Matches TAG | TAG also says to cap for large zones at mean trip distance. Not needed at four zones. |
 | B | HBW productions and attractions | 400/300/200/100 trips/h; attractions scaled to match | Not checked | Placeholder | Trip generation is outside the toy model. Source from the plan's data. |
 | C | Deterrence form, exponential | exp(−βc) | M2.1 section 4.9.14 (logit or exponential form) | Matches TAG | |
 | C | HBW deterrence β | 0.05 per min | M2.2 section 5.2.31 (calibrate deterrence against observed trip-length data) | Placeholder | Calibrate in Phase 3. |
-| C | Intrazonal cost = half the nearest zone's cost | nearest ÷ 2 | M2.2 section 5.2.28; M2.1 section 2.4.4 | Matches TAG | TAG also says to cap for large zones at mean trip distance. Not needed at four zones. |
-| D | HBW distribution is doubly constrained (Furness) | Furness, tolerance 0.1% (relative change in totals) | M2.1 section 4.9.12 (doubly constrained for commuting) | Matches TAG (model type) | The 0.1% tolerance is our choice. TAG's 0.1% in M3.1 Table 4 is for assignment convergence. |
+| E | HBW distribution is doubly constrained (Furness) | Furness, tolerance 0.1% (relative change in totals) | M2.1 section 4.9.12 (doubly constrained for commuting) | Matches TAG (model type) | The 0.1% tolerance is our choice. TAG's 0.1% in M3.1 Table 4 is for assignment convergence. |
 | F | HBO distribution is singly constrained | Attraction weights, one pass | M2.1 section 4.9.12 (singly constrained for other purposes) | Matches TAG | |
-| G | HBO deterrence β | 0.10 per min | M2.2 section 5.2.31 | Placeholder | Calibrate in Phase 3. |
-| H | Zero-car share of HBW trips | 30% | Not checked (plan cites Census TS045) | Placeholder | Source from Census. |
-| I | Value of time | £12 per hour | M3.1 section 2.8.7 (values from TAG Data Book) | Placeholder | Replace with TAG Data Book value. |
-| I | Money cost: car £1.50 per trip | £1.50 | M3.2 section 3.3.3 (fares converted to time by value of time) | Placeholder | Replace with sourced parking and fuel cost. |
-| I | Money cost: bus fare £1.80 | £1.80 | M3.2 section 3.3.3 | Placeholder | Replace with sourced fare. |
-| I | Walk access weight | 2.0 | M3.2 Table 1 (walk access 1.5 to 2.0) | Within TAG range | At the top of the range. |
-| I | Wait weight (bus) | 2.0 | M3.2 Table 1 (waiting time: bus 1; tram and light rail 1 to 1.4) | Outside TAG range | Change to a value in range, or justify. |
-| I | Bus in-vehicle time factor vs car | 1.2 | M3.2 Table 1 (in-vehicle time factor 0.7 to 1.1, as read from the extracted table) | Outside TAG range | Check the table layout, then change or justify. |
-| I | Walk and wait times (3 min, 4 min) | Made up | M3.2 section 3.2 (access and waiting time) | Placeholder | Source from network or survey data. |
-| J | Logit sensitivity λ | 0.1 per min | M2.1 section 4.9.14 (logit form); M2.1 section 4.5.10 (λ estimation); M2.1 Table 3 (section 5.6.16, destination choice λ) | Placeholder | Table 3 is for destination choice, not mode choice. Check units against TAG. |
-| J | Bus alternative-specific constant | Calibrated to 70% car share | Not checked | Not in TAG | Calibration method is ours. Target share is a placeholder. |
-| K | Car occupancy | 1.1 persons per car | M2.2 section 5.4.4 (car occupancy factors; M2.1 gives advice) | Placeholder | Take the value from the TAG Data Book. |
-| K | BPR congestion function, α = 0.15, β = 4 | BPR form | M3.1 Appendix E (TAG uses its own speed/flow relationships) | Not in TAG | The BPR form is not the one TAG specifies. Use Appendix E, or justify BPR. |
-| L | Method of successive averages, stop at relative gap below 0.1% | Gap tolerance 0.1% | M3.1 section 3.4.17, Table 4 (base model convergence below 0.1%) | Matches TAG | |
-| M | Link flow check: GEH below 5 on at least 85% of links | GEH < 5, 85% | M3.1 sections 3.3.10 to 3.3.14, Table 2 (GEH < 5, more than 85% of cases) | Matches TAG | TAG also accepts the absolute or percentage criteria. We use GEH only, which is stricter on that test. |
-| N | Screenline within ±5% | ±5% | M2.2 section 6.2.23 (highway ±5%; public transport ±15%) | Matches TAG | |
-| N | Journey times within 15% (or 1 min if higher), on 85% of routes | 15% or 1 min; 85% | M3.1 section 3.3.15, Table 3 | Matches TAG | |
+| F | HBO deterrence β | 0.10 per min | M2.2 section 5.2.31 | Placeholder | Calibrate in Phase 3. |
+| G | Zero-car share of HBW trips | 30% | Not checked (plan cites Census TS045) | Placeholder | Source from Census. |
+| G | Zero-car share of HBO trips | 30% (same as HBW until sourced) | Not checked | Placeholder | Source from Census, by trip purpose. |
+| H | Value of time | £12 per hour | M3.1 section 2.8.7, PDF p. 20. Method: TAG unit A1-3. Values: data book Table A1.3.2 | Placeholder | Choose a basis and year from Table A1.3.2, then replace. |
+| H | Money cost: car £1.50 per trip | £1.50 | M3.2 section 3.3.3 (fares converted to time by value of time) | Placeholder | Replace with sourced parking and fuel cost. |
+| H | Money cost: bus fare £1.80 | £1.80 | M3.2 section 3.3.3 | Placeholder | Replace with sourced fare. |
+| H | Walk access weight | 2.0 | M3.2 Table 1 (walk access 1.5 to 2.0) | Within TAG range | At the top of the range. |
+| H | Wait weight (bus) | 1.0 | M3.2 Table 1 (waiting time: bus 1) | Matches TAG | Changed from 2.0, which was outside the range. Checked 2026-11-23: TAG lists 1 for interurban bus. |
+| H | Bus in-vehicle time factor vs car | 1.1 | M3.2 Table 1 (in-vehicle time factor 0.7 to 1.1) | Within TAG range | Changed from 1.2, which was outside the range. Checked 2026-11-23 against the local M3.2 Table 1 (range 0.7 to 1.1). |
+| H | Walk and wait times (3 min, 4 min) | Made up | M3.2 section 3.2 (access and waiting time) | Placeholder | Source from network or survey data. |
+| I | Logit sensitivity λ | 0.1 per min | M2.1 section 4.9.14 (logit form); M2.1 section 4.5.10 (λ estimation); M2.1 Table 3 (section 5.6.16, destination choice λ) | Placeholder | Table 3 is for destination choice, not mode choice. Check units against TAG. |
+| I | Bus alternative-specific constant | Calibrated to 70% car share | Not checked | Not in TAG | Calibration method is ours. Target share is a placeholder. Work and other trips share one constant. |
+| J | Car occupancy | 1.1 persons per car | M2.2 section 5.4.4 (car occupancy factors; M2.1 gives advice) | Placeholder | Data book Table A1.3.3 gives 1.11 for work trips (weekday average, 2010). |
+| J | BPR congestion function, α = 0.15, β = 4 | BPR form | M3.1 Appendix E (TAG uses its own speed/flow relationships) | Not in TAG | The BPR form is not the one TAG specifies. Use Appendix E, or justify BPR. |
+| K | Method of successive averages, stop at relative gap below 0.1% | Gap tolerance 0.1% | M3.1 section 3.4.17, Table 4 (base model convergence below 0.1%) | Matches TAG | |
+| L | Link flow check: GEH below 5 on at least 85% of links | GEH < 5, 85% | M3.1 sections 3.3.10 to 3.3.14, Table 2 (GEH < 5, more than 85% of cases) | Matches TAG | TAG also accepts the absolute or percentage criteria. We use GEH only, which is stricter on that test. Current result: 80% of links pass, so the check fails. Kept as a finding, not tuned to pass (notebook Part L). |
+| M | Screenline within ±5% | ±5% | M2.2 section 6.2.23 (highway ±5%; public transport ±15%) | Matches TAG | |
+| M | Journey times within 15% (or 1 min if higher), on 85% of routes | 15% or 1 min; 85% | M3.1 section 3.3.15, Table 3 | Matches TAG | |
 | All | Counts and observed journey times | Made up | Not applicable | Placeholder | Source from DfT counts and journey-time data. |
