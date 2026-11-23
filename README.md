@@ -13,7 +13,10 @@ A personal learning project to build a validated AM peak four-step transport mod
 ## Structure
 
 - `environment.yml`: the conda environment specification.
-- `docs/methodology.md`: a running record of every assumption, source and parameter. This is the model report in progress.
+- `docs/`: the model report and sources. See `docs/README.md` for the index.
+  - `docs/methodology.md`: a running record of every assumption, source and parameter. This is the model report in progress.
+  - `docs/tag/`: copies of the TAG units cited in the notebook.
+  - `docs/project/` and `docs/reference/`: the project plan and background reading (PDFs, not committed).
 - `notebooks/`: analysis notebooks, including the four-zone toy model.
 - `src/`: reusable code, added as the model develops.
 - `tests/`: automated checks for the environment and model components.
