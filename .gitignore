@@ -228,6 +228,8 @@ outputs/
 
 # Project: PDFs (textbooks and the plan are not redistributed in the repo)
 *.pdf
+# ...except our own generated guide, rebuilt by src/make_visual_guide.py
+!docs/toy-model-visual-guide.pdf
 
 # Project: Google Routes API raw responses (terms restrict caching)
 docs/api_raw/
